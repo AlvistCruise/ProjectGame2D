@@ -7,6 +7,7 @@ TagManager:
   - Ground
   - Collectable
   - Enemy
+  - Projectile
   layers:
   - Default
   - TransparentFX
@@ -14,7 +15,7 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
+  - UI2
   - 
   - 
   - 
@@ -46,6 +47,9 @@ TagManager:
     locked: 0
   - name: Background
     uniqueID: 3481375847
+    locked: 0
+  - name: Projectile
+    uniqueID: 593209953
     locked: 0
   - name: entity
     uniqueID: 63130087

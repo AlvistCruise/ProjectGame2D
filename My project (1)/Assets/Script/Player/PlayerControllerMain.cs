@@ -22,6 +22,12 @@ public class PlayerControllerMain : MonoBehaviour
     [SerializeField] private Text cherriesTXT;
     [SerializeField] private Text healthTXT;
 
+    [SerializeField] private GameObject fireballPrefab;
+    [SerializeField] private Transform fireballSpawnPoint;
+    [SerializeField] private float fireballSpeed = 10f;
+    [SerializeField] private float fireCooldown = 3;
+    [SerializeField] private Text fireCooldownTXT;
+
     #region FiniteStateMachine
     private enum State
     { idle, running, jumping, falling, hurt }
@@ -40,7 +46,7 @@ public class PlayerControllerMain : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
         if (Time.deltaTime != 0)
         {
@@ -56,6 +62,23 @@ public class PlayerControllerMain : MonoBehaviour
         // {
         //     isJumping = false;
         // }
+        if (fireCooldown > 0)
+        {
+            fireCooldownTXT.text = fireCooldown.ToString();
+            fireCooldown -= Time.deltaTime;
+        }
+        else
+        {
+            fireCooldownTXT.text = fireCooldown.ToString();
+            fireCooldown = 0;
+        }
+
+        if (Input.GetKeyDown(KeyCode.E) && fireCooldown == 0)
+            {
+                fireCooldown = 3;
+                fireCooldownTXT.text = fireCooldown.ToString();
+                ShootFireball();
+            }
     }
 
 
@@ -161,6 +184,21 @@ public class PlayerControllerMain : MonoBehaviour
                 }
             }
         }
+    }
+
+
+
+
+
+    private void ShootFireball()
+    {
+        GameObject fireball = Instantiate(fireballPrefab, fireballSpawnPoint.position, Quaternion.identity);
+        Rigidbody2D rb = fireball.GetComponent<Rigidbody2D>();
+
+        rb.velocity = new Vector2(fireballSpeed * transform.localScale.x, 0);
+        fireball.transform.localScale = new Vector2(transform.localScale.x, 1);
+
+        Destroy(fireball, 2.5f);
     }
 
 
