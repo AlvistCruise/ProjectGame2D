@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FrogController : MonoBehaviour
+public class FrogController : Enemy
 {
 
     [SerializeField] private float leftCap;
@@ -13,17 +13,14 @@ public class FrogController : MonoBehaviour
     [SerializeField] private LayerMask ground;
 
     private Collider2D coll;
-    private Rigidbody2D rb;
-    private Animator anim;
 
     private bool facingLeft = true;
 
     // Start is called before the first frame update
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         coll = GetComponent<Collider2D>();
-        rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -87,13 +84,5 @@ public class FrogController : MonoBehaviour
         }
     }
 
-    public void JumpedOn()
-    {
-        anim.SetTrigger("Death");
-    }
-
-    public void Death()
-    {
-        Destroy(this.gameObject);
-    }
+   
 }

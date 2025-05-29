@@ -22,10 +22,10 @@ public class FIreball : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        FrogController frog = other.gameObject.GetComponent<FrogController>();
+        Enemy enemy = other.gameObject.GetComponent<Enemy>();
         if (other.gameObject.CompareTag("Enemy"))
         {
-            frog.JumpedOn();
+            enemy.JumpedOn();
             Destroy(gameObject);
         }
         if(other.gameObject.CompareTag("Ground"))
