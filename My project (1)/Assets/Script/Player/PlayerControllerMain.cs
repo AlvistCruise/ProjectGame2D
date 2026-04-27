@@ -46,7 +46,7 @@ public class PlayerControllerMain : MonoBehaviour
     }
 
     // Update is called once per frame
-    private void FixedUpdate()
+    private void Update()
     {
         if (Time.deltaTime != 0)
         {
