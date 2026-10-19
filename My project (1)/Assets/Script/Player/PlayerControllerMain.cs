@@ -1,51 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class PlayerControllerMain : MonoBehaviour
+public class PlayerControllerMain : PlayerAttributes
 {
-    private Rigidbody2D rb;
-    private Collider2D coll;
-    private Animator anim;
-
-    [SerializeField] private float speed = 8f;
-    [SerializeField] private float jumpForce = 10f;
-    [SerializeField] private LayerMask ground;
-    private bool isJumping = false;
-
-    [SerializeField] private int hurtForce = 10;
-
-    [SerializeField] private int cherries = 0;
-    [SerializeField] private int health = 5;
-
-    [SerializeField] private Text cherriesTXT;
-    [SerializeField] private Text healthTXT;
-
-    [SerializeField] private GameObject fireballPrefab;
-    [SerializeField] private Transform fireballSpawnPoint;
-    [SerializeField] private float fireballSpeed = 10f;
-    [SerializeField] private float fireCooldown = 3;
-    [SerializeField] private Text fireCooldownTXT;
-
     #region FiniteStateMachine
     private enum State
     { idle, running, jumping, falling, hurt }
     private State state = State.idle;
     #endregion
 
-
-    // Start is called before the first frame update
-    void Awake()
+    protected override void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
-        coll = GetComponent<Collider2D>();
-        anim = GetComponent<Animator>();
-
-        healthTXT.text = health.ToString();
+        base.Awake();
     }
 
-    // Update is called once per frame
     private void Update()
     {
         if (Time.deltaTime != 0)
@@ -58,29 +27,14 @@ public class PlayerControllerMain : MonoBehaviour
             anim.SetInteger("state", (int)state);
         }
 
-        // if (coll.IsTouchingLayers(ground) == true)
-        // {
-        //     isJumping = false;
-        // }
-        if (fireCooldown > 0)
-        {
-            fireCooldownTXT.text = fireCooldown.ToString();
-            fireCooldown -= Time.deltaTime;
-        }
-        else
-        {
-            fireCooldownTXT.text = fireCooldown.ToString();
-            fireCooldown = 0;
-        }
+        UpdateFireCooldown();
 
         if (Input.GetKeyDown(KeyCode.E) && fireCooldown == 0)
-            {
-                fireCooldown = 3;
-                fireCooldownTXT.text = fireCooldown.ToString();
-                ShootFireball();
-            }
+        {
+            ResetFireCooldown(3f);
+            ShootFireball();
+        }
     }
-
 
     private void Movement()
     {
@@ -96,7 +50,7 @@ public class PlayerControllerMain : MonoBehaviour
             rb.linearVelocity = new Vector2(speed, rb.linearVelocity.y);
             transform.localScale = new Vector2(1, 1);
         }
-        else if (Input.GetButtonUp("Horizontal") && isJumping == false) // && isJumping == false
+        else if (Input.GetButtonUp("Horizontal") && isJumping == false)
         {
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
         }
@@ -152,8 +106,7 @@ public class PlayerControllerMain : MonoBehaviour
         if (collision.tag == "Collectable")
         {
             Destroy(collision.gameObject);
-            cherries += 1;
-            cherriesTXT.text = cherries.ToString();
+            AddCherry(1);
         }
     }
 
@@ -173,30 +126,14 @@ public class PlayerControllerMain : MonoBehaviour
                 if (other.gameObject.transform.position.x > transform.position.x)
                 {
                     rb.linearVelocity = new Vector2(-hurtForce, rb.linearVelocity.y);
-                    health -= 1;
-                    healthTXT.text = health.ToString();
+                    TakeDamage(1);
                 }
                 else
                 {
                     rb.linearVelocity = new Vector2(hurtForce, rb.linearVelocity.y);
-                    health -= 1;
-                    healthTXT.text = health.ToString();
+                    TakeDamage(1);
                 }
             }
-        }
-    }
-
-
-
-
-
-    public void TakeDamage(int damage)
-    {
-        health -= damage;
-        if (health < 0) health = 0;
-        if (healthTXT != null)
-        {
-            healthTXT.text = health.ToString();
         }
     }
 
@@ -210,6 +147,4 @@ public class PlayerControllerMain : MonoBehaviour
 
         Destroy(fireball, 2.5f);
     }
-
-
 }

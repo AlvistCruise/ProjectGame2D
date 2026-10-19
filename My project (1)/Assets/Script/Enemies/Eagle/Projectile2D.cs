@@ -22,7 +22,7 @@ public class Projectile2D : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             hasHit = true;
-            PlayerControllerMain player = other.GetComponent<PlayerControllerMain>();
+            PlayerAttributes player = other.GetComponent<PlayerAttributes>();
             if (player != null)
             {
                 player.TakeDamage(1);
@@ -43,7 +43,7 @@ public class Projectile2D : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             hasHit = true;
-            PlayerControllerMain player = collision.gameObject.GetComponent<PlayerControllerMain>();
+            PlayerAttributes player = collision.gameObject.GetComponent<PlayerAttributes>();
             if (player != null)
             {
                 player.TakeDamage(1);
