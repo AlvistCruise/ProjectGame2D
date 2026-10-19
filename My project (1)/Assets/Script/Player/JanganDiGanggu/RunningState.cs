@@ -23,17 +23,17 @@ public class RunningState : PlayerState
 
         if (hDirection < 0)
         {
-            player.rb.velocity = new Vector2(-player.speed, player.rb.velocity.y);
+            player.rb.linearVelocity = new Vector2(-player.speed, player.rb.linearVelocity.y);
             player.transform.localScale = new Vector2(-1, 1);
         }
         else if (hDirection > 0)
         {
-            player.rb.velocity = new Vector2(player.speed, player.rb.velocity.y);
+            player.rb.linearVelocity = new Vector2(player.speed, player.rb.linearVelocity.y);
             player.transform.localScale = new Vector2(1, 1);
         }
         else if (Input.GetButtonUp("Horizontal")) // && isJumping == false
         {
-            player.rb.velocity = new Vector2(0, player.rb.velocity.y);
+            player.rb.linearVelocity = new Vector2(0, player.rb.linearVelocity.y);
             player.ChangeState(new IdleState(player));
         }
 

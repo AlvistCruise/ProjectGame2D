@@ -28,7 +28,7 @@ public class FrogController : Enemy
     {
         if (anim.GetBool("Jumping"))
         {
-            if (rb.velocity.y < 0)
+            if (rb.linearVelocity.y < 0)
             {
                 anim.SetBool("Falling", true);
                 anim.SetBool("Jumping", false);
@@ -53,7 +53,7 @@ public class FrogController : Enemy
 
                 if (coll.IsTouchingLayers(ground))
                 {
-                    rb.velocity = new Vector2(-jumpLength, jumpHeight);
+                    rb.linearVelocity = new Vector2(-jumpLength, jumpHeight);
                     anim.SetBool("Jumping", true);
                 }
             }
@@ -73,7 +73,7 @@ public class FrogController : Enemy
 
                 if (coll.IsTouchingLayers(ground))
                 {
-                    rb.velocity = new Vector2(jumpLength, jumpHeight);
+                    rb.linearVelocity = new Vector2(jumpLength, jumpHeight);
                     anim.SetBool("Jumping", true);
                 }
             }

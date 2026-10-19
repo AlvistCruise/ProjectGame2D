@@ -1,15 +1,13 @@
-// EagleDeathState.cs (2D Version)
 using UnityEngine;
 
 public class EagleDeathState : EagleBaseState
 {
-    private float _timeEntered;
-    private const float TIME_TO_DESPAWN = 3f;
+    private float timeEntered;
+    private const float timeToDespawn = 3f;
 
     public override void EnterState(Eagle eagle)
     {
-        Debug.Log("Eagle entering Death State (2D).");
-        _timeEntered = Time.time;
+        timeEntered = Time.time;
 
         if (eagle.animator != null)
         {
@@ -25,16 +23,14 @@ public class EagleDeathState : EagleBaseState
         Rigidbody2D eagleRb2D = eagle.GetRigidbody2D();
         if (eagleRb2D != null)
         {
-            eagleRb2D.velocity = Vector2.zero; // Stop any movement
-            eagleRb2D.isKinematic = true; // Or eagleRb2D.simulated = false; to remove from physics simulation
-            // Optionally, if you want it to fall with gravity and not be kinematic:
-            // eagleRb2D.gravityScale = 1f;
+            eagleRb2D.linearVelocity = Vector2.zero;
+            eagleRb2D.bodyType = RigidbodyType2D.Kinematic;
         }
     }
 
     public override void UpdateState(Eagle eagle)
     {
-        if (Time.time >= _timeEntered + TIME_TO_DESPAWN)
+        if (Time.time >= timeEntered + timeToDespawn)
         {
             if (eagle.gameObject != null)
             {
@@ -45,6 +41,5 @@ public class EagleDeathState : EagleBaseState
 
     public override void ExitState(Eagle eagle)
     {
-        // This state typically doesn't exit
     }
 }

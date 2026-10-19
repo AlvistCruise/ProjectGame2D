@@ -9,12 +9,12 @@ public class JumpingState : PlayerState
     public override void Enter()
     {
         player.GetAnimator().SetInteger("state", 2);
-        player.rb.velocity = new Vector2(player.rb.velocity.x, player.jumpForce);
+        player.rb.linearVelocity = new Vector2(player.rb.linearVelocity.x, player.jumpForce);
     }
 
     public override void Update()
     {
-        if (player.rb.velocity.y < 0)
+        if (player.rb.linearVelocity.y < 0)
             player.ChangeState(new FallingState(player));
     }
 }

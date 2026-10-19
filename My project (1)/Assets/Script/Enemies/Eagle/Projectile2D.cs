@@ -1,41 +1,58 @@
-// Projectile2D.cs
 using UnityEngine;
 
 public class Projectile2D : MonoBehaviour
 {
-    // public float speed = 10f; // Speed can also be set by the Eagle
     public float lifetime = 3f;
-    // public Rigidbody2D rb; // Can be assigned if not moving via transform
+    private bool hasHit = false;
 
     void Start()
     {
-        // rb = GetComponent<Rigidbody2D>();
-        // If not using Rigidbody velocity from Eagle:
-        // rb.velocity = transform.right * speed; // Assuming sprite faces right
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null)
+        {
+            col.usedByEffector = false;
+        }
         Destroy(gameObject, lifetime);
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // Example: Damage Player
+        if (hasHit) return;
+
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Projectile hit Player!");
-            // PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
-            // if (playerHealth != null) playerHealth.TakeDamage(10);
-            Destroy(gameObject); // Destroy projectile on hit
+            hasHit = true;
+            PlayerControllerMain player = other.GetComponent<PlayerControllerMain>();
+            if (player != null)
+            {
+                player.TakeDamage(1);
+            }
+            Destroy(gameObject);
         }
-        // Optionally destroy on hitting other things like walls
-        // else if (other.CompareTag("Wall")) Destroy(gameObject);
+        else if (other.CompareTag("Ground"))
+        {
+            hasHit = true;
+            Destroy(gameObject);
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-         // Example: Damage Player if not using trigger
+        if (hasHit) return;
+
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Projectile hit Player!");
-            // ... damage logic ...
+            hasHit = true;
+            PlayerControllerMain player = collision.gameObject.GetComponent<PlayerControllerMain>();
+            if (player != null)
+            {
+                player.TakeDamage(1);
+            }
+            Destroy(gameObject);
+        }
+        else if (collision.gameObject.CompareTag("Ground"))
+        {
+            hasHit = true;
             Destroy(gameObject);
         }
     }

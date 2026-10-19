@@ -37,7 +37,7 @@ public class OppossumController : Enemy
                     transform.localScale = new Vector3(1, 1, 1);
                 }
 
-                rb.velocity = new Vector2(-walkSpeed, rb.velocity.y);
+                rb.linearVelocity = new Vector2(-walkSpeed, rb.linearVelocity.y);
             }
             else
             {
@@ -53,7 +53,7 @@ public class OppossumController : Enemy
                     transform.localScale = new Vector3(-1, 1, 1);
                 }
 
-                rb.velocity = new Vector2(walkSpeed, rb.velocity.y);
+                rb.linearVelocity = new Vector2(walkSpeed, rb.linearVelocity.y);
             }
             else
             {

@@ -88,17 +88,17 @@ public class PlayerControllerMain : MonoBehaviour
 
         if (hDirection < 0)
         {
-            rb.velocity = new Vector2(-speed, rb.velocity.y);
+            rb.linearVelocity = new Vector2(-speed, rb.linearVelocity.y);
             transform.localScale = new Vector2(-1, 1);
         }
         else if (hDirection > 0)
         {
-            rb.velocity = new Vector2(speed, rb.velocity.y);
+            rb.linearVelocity = new Vector2(speed, rb.linearVelocity.y);
             transform.localScale = new Vector2(1, 1);
         }
         else if (Input.GetButtonUp("Horizontal") && isJumping == false) // && isJumping == false
         {
-            rb.velocity = new Vector2(0, rb.velocity.y);
+            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
         }
         if (Input.GetButtonDown("Jump") && coll.IsTouchingLayers(ground))
         {
@@ -108,7 +108,7 @@ public class PlayerControllerMain : MonoBehaviour
 
     private void Jump()
     {
-        rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         state = State.jumping;
         isJumping = true;
     }
@@ -117,7 +117,7 @@ public class PlayerControllerMain : MonoBehaviour
     {
         if (state == State.jumping)
         {
-            if (rb.velocity.y < .3f)
+            if (rb.linearVelocity.y < .3f)
             {
                 state = State.falling;
             }
@@ -132,12 +132,12 @@ public class PlayerControllerMain : MonoBehaviour
         }
         else if (state == State.hurt)
         {
-            if (Mathf.Abs(rb.velocity.x) < .1f)
+            if (Mathf.Abs(rb.linearVelocity.x) < .1f)
             {
                 state = State.idle;
             }
         }
-        else if (Mathf.Abs(rb.velocity.x) > 2f)
+        else if (Mathf.Abs(rb.linearVelocity.x) > 2f)
         {
             state = State.running;
         }
@@ -172,13 +172,13 @@ public class PlayerControllerMain : MonoBehaviour
                 state = State.hurt;
                 if (other.gameObject.transform.position.x > transform.position.x)
                 {
-                    rb.velocity = new Vector2(-hurtForce, rb.velocity.y);
+                    rb.linearVelocity = new Vector2(-hurtForce, rb.linearVelocity.y);
                     health -= 1;
                     healthTXT.text = health.ToString();
                 }
                 else
                 {
-                    rb.velocity = new Vector2(hurtForce, rb.velocity.y);
+                    rb.linearVelocity = new Vector2(hurtForce, rb.linearVelocity.y);
                     health -= 1;
                     healthTXT.text = health.ToString();
                 }
@@ -190,12 +190,22 @@ public class PlayerControllerMain : MonoBehaviour
 
 
 
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+        if (health < 0) health = 0;
+        if (healthTXT != null)
+        {
+            healthTXT.text = health.ToString();
+        }
+    }
+
     private void ShootFireball()
     {
         GameObject fireball = Instantiate(fireballPrefab, fireballSpawnPoint.position, Quaternion.identity);
         Rigidbody2D rb = fireball.GetComponent<Rigidbody2D>();
 
-        rb.velocity = new Vector2(fireballSpeed * transform.localScale.x, 0);
+        rb.linearVelocity = new Vector2(fireballSpeed * transform.localScale.x, 0);
         fireball.transform.localScale = new Vector2(transform.localScale.x, 1);
 
         Destroy(fireball, 2.5f);

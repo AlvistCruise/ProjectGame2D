@@ -9,7 +9,7 @@ public class IdleState : PlayerState
     public override void Enter()
     {
         player.GetAnimator().SetInteger("state", 0);
-        player.rb.velocity = Vector2.zero;
+        player.rb.linearVelocity = Vector2.zero;
     }
 
     public override void HandleInput()

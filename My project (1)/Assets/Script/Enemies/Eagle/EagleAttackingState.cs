@@ -1,14 +1,9 @@
-// EagleAttackingState.cs (2D Version)
 using UnityEngine;
 
 public class EagleAttackingState : EagleBaseState
 {
-    private float _lastAttackTime;
-
     public override void EnterState(Eagle eagle)
     {
-        Debug.Log("Eagle entering Attacking State (2D).");
-        _lastAttackTime = Time.time - eagle.attackCooldown; // Allow immediate shot
     }
 
     public override void UpdateState(Eagle eagle)
@@ -24,7 +19,7 @@ public class EagleAttackingState : EagleBaseState
         Vector2 currentEaglePos2D = eagle.transform.position;
         Vector2 playerPos2D = eagle.player.position;
         Vector2 directionToPlayer = (playerPos2D - currentEaglePos2D).normalized;
-        eagle.FaceDirection2D(directionToPlayer); // Always face player in attack state
+        eagle.FaceDirection2D(directionToPlayer);
 
         if (distanceToPlayer > eagle.attackRange)
         {
@@ -39,15 +34,13 @@ public class EagleAttackingState : EagleBaseState
             return;
         }
 
-        if (Time.time >= _lastAttackTime + eagle.attackCooldown)
+        if (eagle.CanShoot())
         {
-            eagle.Shoot(); // Eagle.Shoot() is now 2D ready
-            _lastAttackTime = Time.time;
+            eagle.Shoot();
         }
     }
 
     public override void ExitState(Eagle eagle)
     {
-        Debug.Log("Eagle exiting Attacking State (2D).");
     }
 }
